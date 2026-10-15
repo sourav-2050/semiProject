@@ -15,16 +15,18 @@ const DonarForm = () => {
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
-      .then((data) => {
+        .then((data) => {
         console.log(data);
-        e.target.reset();
-        if(data){
-            alert('Successfully Registered')
+        if (data.success) {
+          e.target.reset();
+          alert("Successfully Registered");
+        } else {
+          alert(data.message || "Registration failed");
         }
-        else {
-    alert(data.message);
-  }
-
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Something went wrong!");
       });
   };
   return (
