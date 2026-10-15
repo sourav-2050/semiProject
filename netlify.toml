@@ -1,0 +1,33 @@
+[build]
+  command = "cd client-side && npm install && npm run build"
+  publish = "client-side/dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# API routes -> Netlify Function
+[[redirects]]
+  from = "/users"
+  to = "/.netlify/functions/api/users"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/users/*"
+  to = "/.netlify/functions/api/users/:splat"
+  status = 200
+  force = true
+
+# Only the login API (NOT the /admin React page)
+[[redirects]]
+  from = "/admin/login"
+  to = "/.netlify/functions/api/admin/login"
+  status = 200
+  force = true
+
+# React Router SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
