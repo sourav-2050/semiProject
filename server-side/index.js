@@ -15,19 +15,19 @@ app.use((req, res, next) => {
 // Set MONGO_URI in Netlify -> Site settings -> Environment variables
 const uri = process.env.MONGO_URI;
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
+let client = null;
 let dbConnection = null;
 
 async function getCollections() {
   if (!uri) throw new Error("MONGO_URI is not set");
   if (!dbConnection) {
+    client = new MongoClient(uri, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+    });
     await client.connect();
     dbConnection = client.db("myDatabase");
   }
